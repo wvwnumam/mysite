@@ -1,8 +1,13 @@
 from django.shortcuts import render
+from .models import Post
 
 
 def index(request):
+    # Queryset
+    posts = Post.objects.all()
+
     context = {
-        'judul': "Halaman Blog"
+        'judul': "Halaman Blog",
+        'posts': posts
     }
-    return render(request, 'home/index.html', context)
+    return render(request, 'blog/index.html', context)
