@@ -7,7 +7,7 @@ def index(request):
     posts = Post.objects.all()
 
     context = {
-        'judul': "Halaman Blog",
+        'judul': "Halaman Utama",
         'posts': posts
     }
     return render(request, 'blog/index.html', context)
