@@ -11,12 +11,12 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
-  <title>{{ judul }}</title>
+  <title>{{ title }}</title>
 </head>
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
       <a class="navbar-brand font-weight-bold" href="/">mysite</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -27,23 +27,18 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/">Utama</a>
+            <a class="nav-link" href="/c/berita">Berita</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Kategori
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Category1</a>
-              <a class="dropdown-item" href="#">Category2</a>
-              <a class="dropdown-item" href="#">Category3</a>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link" href="/c/pendidikan">Pendidikan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/c/umum">Umum</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <input class="form-control mr-sm-2 border-0 shadow-sm" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-secondary my-2 my-sm-0 border-0 shadow-sm" type="submit">Search</button>
         </form>
       </div>
     </div>
@@ -51,10 +46,18 @@
 
   <!-- Konten Body -->
   <div class="container">
-  {% block body %}
+    {% block body %}
 
-  {% endblock %}
+    {% endblock %}
   </div>
+
+  <footer class="footer">
+    <nav class="navbar navbar-light bg-light">
+      <div class="container">
+        <span class="text-muted">MySite copyright &copy 2020</span>
+      </div>
+    </nav>
+  </footer>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

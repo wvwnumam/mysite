@@ -1,0 +1,37 @@
+{% extends 'snippets/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <!-- Cards -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card mt-5 mb-3 border-0 shadow-sm">
+                <img src="{{ post.image_source }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">{{ post.title }}</h5>
+                    <p class="card-text text-justify">{% autoescape off %}{{ post.body }}{% endautoescape %}</p>
+                    <p class="card-text">
+                        <small class="text-muted">{{ post.author }}</small>
+                        <small class="text-muted float-right">{{ post.date_created }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+{% endblock body %}

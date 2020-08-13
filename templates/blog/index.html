@@ -1,5 +1,6 @@
 {% extends 'snippets/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block body %}
 
@@ -14,9 +15,9 @@
 <body>
 
     <!-- Jumbotron -->
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron mt-5 bg-light border-0 shadow-sm">
         <div class="container">
-            <h1 class="display-4">{{ judul }}</h1>
+            <h1 class="display-4 font-weight-bold">{{ title }}</h1>
             <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
         </div>
     </div>
@@ -27,23 +28,47 @@
         <!-- Main Cards -->
         <div class="col-md-8">
             {% for post in posts %}
-            <div class="card mb-3">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="" class="card-img" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title font-weight-bold">{{ post.title }}</h5>
-                            <p class="card-text">{{ post.body }}</p>
-                            <p class="card-text"><small class="text-muted">{{ post.date_created }}</small></p>
+            <a href="/p/{{ post.slug }}" class="text-decoration-none text-dark">
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="{{ post.image_source }}" class="card-img" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title font-weight-bold">{{ post.title }}</h5>
+                                <p class="card-text">{{ post.body|truncatewords:15 }}</p>
+                                <p class="card-text">
+                                    <small class="text-muted">{{ post.category }}</small>
+                                    <small class="text-muted float-right">{{ post.date_created|naturaltime }}</small>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
-        
+
+        <!-- Side Cards -->
+        <div class="col-md-4">
+            <div class="alert bg-light border-0 shadow-sm font-weight-bold" role="alert">
+                Top Highlight
+            </div>
+            {% for post in posts %}
+            <a href="/p/{{ post.slug }}" class="text-decoration-none text-dark">
+                <div class="card mt-3 border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold">{{ post.title }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">{{ post.date_created|naturalday }}</small>
+                        </p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
     </div>
 
 </body>
