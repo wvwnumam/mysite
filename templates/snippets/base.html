@@ -18,7 +18,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-      <a class="navbar-brand font-weight-bold" href="/">mysite</a>
+      <a class="navbar-brand font-weight-bold" href="/">MySite</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -26,15 +26,11 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/c/berita">Berita</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/c/pendidikan">Pendidikan</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/c/umum">Umum</a>
-          </li>
+          {% for category in categories %}
+            <li class="nav-item">
+              <a class="nav-link text-capitalize" href="/c/{{ category.category }}">{{ category.category }}</a>
+            </li>
+          {% endfor %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2 border-0 shadow-sm" type="search" placeholder="Search" aria-label="Search">
@@ -54,7 +50,7 @@
   <footer class="footer">
     <nav class="navbar navbar-light bg-light">
       <div class="container">
-        <span class="text-muted">MySite copyright &copy 2020</span>
+        <span class="text-muted">Copyright 2020 &copy MySite</span>
       </div>
     </nav>
   </footer>

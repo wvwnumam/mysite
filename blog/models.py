@@ -7,9 +7,9 @@ class Post(models.Model):
     author = models.CharField(max_length=50)
     category = models.CharField(max_length=50)
     slug = models.SlugField()
-    image_source = models.CharField(max_length=500)
-    date_created = models.DateTimeField( auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
+    image = models.CharField(max_length=500)
+    publish = models.DateTimeField( auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
 
     def save(self):
         self.slug = slugify(self.title)
