@@ -1,38 +1,57 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView, ListView
 from .models import Post
 
-def categories():
-    return Post.objects.values('category').distinct()
+# Categories for navbar
+categories = Post.objects.values('category').distinct()
 
-def index(request):
-    # Queryset
-    posts = Post.objects.all().order_by('publish').reverse()
-
-    context = {
-        'title': "Selamat Datang di MySite",
-        'categories': categories(),
-        'posts': posts
+class PostListView(ListView):
+    model = Post
+    ordering = 'publish'
+    paginate_by = 2
+    template_name = "blog/category.html"
+    extra_context = {
+        'title': 'Selamat Datang di MySite',
+        'categories': categories
     }
-    return render(request, 'blog/index.html', context)
 
-def category(request, category):
-    # Queryset
-    posts = Post.objects.filter(category=category).order_by('publish').reverse()
+    def get_queryset(self):
+        if self.kwargs['category'] != 'all':
+            self.queryset = self.model.objects.filter(category=self.kwargs['category'])
+            self.kwargs.update({'category': self.kwargs['category']})
+        return super().get_queryset().order_by('publish').reverse()
+    
+    def get_context_data(self, **kwargs):
+        self.kwargs.update(self.extra_context)
+        kwargs = self.kwargs
+        return super().get_context_data(**kwargs)
+    
 
-    context = {
-        'title': "Kategori",
-        'categories': categories(),
-        'posts': posts
-    }
-    return render(request, 'blog/index.html', context)
+class IndexView(TemplateView):
+    template_name = 'blog/index.html'
 
-def post(request, slug):
-    # Queryset
-    post = Post.objects.get(slug=slug)
+    def get_context_data(self, **kwargs):
+        posts = Post.objects.all().order_by('publish').reverse() # All post
+        newest = Post.objects.all().order_by('publish').reverse()[:3] # Newest post
 
-    context = {
-        'title': post.title,
-        'categories': categories(),
-        'post': post
-    }
-    return render(request, 'blog/post.html', context)
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Selamat Datang di Mysite'
+        context['categories'] = categories
+        context['posts'] = posts
+        context['newest'] = newest
+        
+        return context
+
+class PostView(TemplateView):
+    template_name = 'blog/post.html'
+
+    def get_context_data(self, **kwargs):
+        # get single post by slug
+        post = Post.objects.get(slug=kwargs['slug'])
+
+        context = super().get_context_data(**kwargs)
+        context['title'] = post.title
+        context['categories'] = categories
+        context['post'] = post
+        
+        return context
