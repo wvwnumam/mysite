@@ -18,3 +18,13 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Comment(models.Model):
+    post_slug = models.SlugField()
+    author = models.CharField(max_length=50, default='anonymous')
+    text = models.TextField()
+    publish = models.DateTimeField( auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.publish.strftime('%Y-%m-%d %H:%M:%S')
+

@@ -1,5 +1,6 @@
 {% extends 'snippets/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block body %}
 
@@ -15,7 +16,7 @@
 
     <!-- Cards -->
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-10">
             <div class="card mt-5 mb-3 border-0 shadow-sm">
                 <img src="{{ post.image }}" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -27,6 +28,36 @@
                     </p>
                 </div>
             </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class="col-10">
+            <div class="alert bg-light border-0 shadow-sm font-weight-bold" role="alert">
+                Komentar
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.text }}
+                {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}  
+                {% endfor %}
+                <input class="btn btn-secondary border-0 shadow-sm float-right mt-2" type="submit" value="submit">
+            </form>
+        </div>
+
+        <!-- Comment Box -->
+        <div class="col-10">
+            {% for comment in comments %}
+            <div class="card mt-5 mb-3 border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="card-text text-justify">{% autoescape off %}{{ comment.text }}{% endautoescape %}</p>
+                    <p class="card-text">
+                        <small class="text-muted">{{ comment.author }}</small>
+                        <small class="text-muted float-right">{{ comment.publish|naturaltime }}</small>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 

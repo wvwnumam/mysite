@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
-from .models import Post
+from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views import View
+from django.http import HttpResponseRedirect
+from .models import Post, Comment
+from .forms import CommentForm
 
 # Categories for navbar
 categories = Post.objects.values('category').distinct()
@@ -9,7 +12,7 @@ class PostListView(ListView):
     model = Post
     ordering = 'publish'
     paginate_by = 2
-    template_name = "blog/category.html"
+    template_name = 'blog/category.html'
     extra_context = {
         'title': 'Selamat Datang di MySite',
         'categories': categories
@@ -42,16 +45,44 @@ class IndexView(TemplateView):
         
         return context
 
-class PostView(TemplateView):
+
+class PostDetailView(DetailView):
+    model = Post
     template_name = 'blog/post.html'
+    extra_context = {
+        'title': 'Unggahan',
+        'categories': categories,
+        'form': CommentForm,
+    }
 
     def get_context_data(self, **kwargs):
-        # get single post by slug
-        post = Post.objects.get(slug=kwargs['slug'])
+        comments = Comment.objects.filter(post_slug=self.kwargs['slug']) # get comment
+        self.kwargs.update(self.extra_context)
+        self.kwargs.update({'comments': comments})
+        kwargs = self.kwargs
+        return super().get_context_data(**kwargs)
+
+
+class PostFormView(FormView):
+    template_name = 'blog/post.html'
+    form_class = CommentForm
+
+    def get_context_data(self, **kwargs):
+        post = Post.objects.get(slug=self.kwargs['slug']) # get single post
+        comments = Comment.objects.filter(post_slug=self.kwargs['slug']).order_by('publish').reverse() # get comment
 
         context = super().get_context_data(**kwargs)
-        context['title'] = post.title
+        context['title'] = 'Unggahan'
         context['categories'] = categories
         context['post'] = post
-        
+        context['comments'] = comments
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        comment = Comment()
+        comment.post_slug = kwargs['slug']
+        comment.text = request.POST.get('text')
+        comment.save()
+
+        return HttpResponseRedirect('/p/' + self.kwargs['slug'])    
